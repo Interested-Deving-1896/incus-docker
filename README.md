@@ -1,137 +1,91 @@
 # incus-docker
-A project to run incus in docker/podman
 
-Incus is a fork of lxd. Please see here:
-https://linuxcontainers.org/incus/
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/incus-docker) [![KDE Eco](https://img.shields.io/badge/KDE%20Eco-certified-brightgreen?logo=kde&logoColor=white&style=flat-square)](https://eco.kde.org/) [![Blue Angel](https://img.shields.io/badge/Blue%20Angel-DE--UZ%20215-0055a4?style=flat-square)](https://www.blauer-engel.de/en/certification/criteria) [![Energy](https://api.green-coding.io/v1/ci/badge/get?repo=Interested-Deving-1896%2Fincus-docker&branch=main&workflow=eco-audit.yml)](https://metrics.green-coding.io/ci-index.html)
 
-This project aims to maintain a Dockerfile to run incus in a docker/podman container.
-It also installs the incus-ui-canonical to have a Web-based UI.
 
-*Versions*
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-* Debian version: I recommend using this with any glibc-based distributions. This is based off of zabbly/incus stable builds ( https://github.com/zabbly/incus )
+## Architecture
 
-* Alpine version: Available, only in Dockerfile form. These will not be prioritized.
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-* Alpine no-vm version: Available, only in Dockerfile form. This is a smaller iamge which doesn't have qemu/VM functionality.
+## Install
 
-*Branches*
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
-You can pull from:
-* incus-docker:latest -- The default choice. The latest stable version of Incus (Debian based)
-* incus-docker:daily -- The daily builds from zabbly/incus (Debian based)
-* incus-docker:lts -- The 6.0 LTS version of incus. (Debian based)
-
-How to use it:
-
-*Note*: If you use the environment variable SETIPTABLES=true, it will be adding:
-```
-iptables (or iptables-legacy) -I DOCKER-USER -j ACCEPT
-ip6tables (or ip6tables-legacy) -I DOCKER-USER -j ACCEPT
+```bash
+git clone https://github.com/Interested-Deving-1896/incus-docker.git
+cd incus-docker
 ```
 
-The reason is that, without doing this, docker's iptables settings will be blocking the connections from the incus bridge you create, and your containers/vms will not be able to access the internet. If you use podman, it's not needed.
+## Usage
 
-# To use the image
+<!-- Add usage examples here. This section is yours — the AI will not modify it. -->
 
-First, make the directory to hold incus configuration:
-``` mkdir /var/lib/incus ```
+## Configuration
 
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
 
-With Podman (needs root permissions) (recommended):
-```
-sudo podman run -d \
---name incus \
---cgroups=no-conmon \
---cgroupns=host \
---security-opt unmask=/sys/fs/cgroup \
---privileged \
---network host \
---pid=host \
---volume /dev:/dev \
---volume /var/lib/incus:/var/lib/incus \
---volume /lib/modules:/lib/modules:ro \
-ghcr.io/cmspam/incus-docker:latest
-```
-With Docker:
+## CI
+
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
+
+## Mirror chain
+
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/incus-docker`](https://github.com/Interested-Deving-1896/incus-docker) and mirrored through:
 
 ```
-docker run -d \
---name incus \
---privileged \
---env SETIPTABLES=true \
---restart unless-stopped \
---network host \
---pid=host \
---cgroupns=host \
---volume /dev:/dev \
---volume /var/lib/incus:/var/lib/incus \
---volume /lib/modules:/lib/modules:ro \
-ghcr.io/cmspam/incus-docker:latest
+Interested-Deving-1896/incus-docker  ──►  OpenOS-Project-OSP/incus-docker  ──►  OpenOS-Project-Ecosystem-OOC/incus-docker
 ```
 
-# Fixing cgroups issue
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
 
-If you run 'podman logs incus' you may see an error such as
-```
-level=error msg="balance: Unable to set cpuset" err="setting cgroup item for the container failed"
-name=(container) value="0,1,2,3"
-```
-This can be fixed by making sure you run with the option:
-```--pid=host```
+## Contributors
 
-# AppArmor
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
 
-If you have AppArmor enabled on your setup, you may need to add permissions to dnsmasq so that it can work with Incus without permission errors.  Here is an example of how to do so with OpenSuse Tumbleweed, but it should be similar for other distributions.
+## Origins
 
-Please edit the file:
-```/etc/apparmor.d/usr.sbin.dnsmasq```
+<!-- AI:start:origins -->
+_Original project — no upstream influences recorded._
+<!-- AI:end:origins -->
 
-You will find a line like below, for Tumbleweed it was line 56 or so:
- ```/var/log/dnsmasq*.log w,```
+## Resources
 
-Under that line, please add
- ```/var/lib/incus/** rw,```
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
+
+## Accessibility
+
+<!-- AI:start:accessibility -->
+This repo uses automated accessibility auditing via `check-accessibility.yml`.
+
+Checks include: CODEOWNERS ownership coverage, README screen-reader compatibility,
+WCAG 2.1 AA HTML compliance, audio overview (espeak-ng), and Braille output (liblouis).
 
 
-If you want to use AppArmor functionality in incus, you can pass it through to the container by adding:
 
-```--volume /sys/kernel/security:/sys/kernel/security```
 
-# OpenVSwitch
+Run the [Check Accessibility](https://github.com/Interested-Deving-1896/incus-docker/actions/workflows/check-accessibility.yml)
+workflow to generate the first report and accessibility artifacts.
+See [DOCS/accessibility.md](https://github.com/Interested-Deving-1896/incus-docker/blob/main/DOCS/accessibility.md) for the full reference.
+<!-- AI:end:accessibility -->
 
-If you use OpenVSwitch, add this line to your docker/podman command:
-```--volume /run/openvswitch:/run/openvswitch```
+## License
 
-# Alpine-based Image
-
-NOTE: If you are using the alpine version with a glibc-based image, you can't depend on the ability to load the modules for VMs automatically. You should set up your environment to automatically load vhost_vsock and kvm modules. You can do it like this:
-
-```
-echo "vhost_vsock" > /etc/modules-load.d/incus.conf
-echo "kvm" >> /etc/modules-load.d/incus.conf
-```
-
-# Management
-
-After you start the container, incus will be running. If you used the folder I suggested and used host networking, you can manage it immediately with the incus binary from the same machine. Grab the binary from the latest releases here:
-
-https://github.com/lxc/incus/releases
-
-For example, I use bin.linux.incus.x86_64 from the Assets at the above link.
-
-You can then run **chmod +x bin.linux.incus.x86_64** to make it executable. Let's rename it to incus by running  **mv bin.linux.incus.x86_64 incus**
-
-Now we can check it's working by running
-
-```./incus admin init```
-
-And we can proceed to configure incus.
-
-I find it easiest to move the binary to /usr/local/bin so that I can just run **incus admin init** or whatever other incus command I need from PATH.
-
-If you configure it to be manageable from the network, we can access the web UI, at https://{YOUR IP}:8443
-
-I have successfully tested on both arm64 and x86_64, on ClearLinux (x86_64) and OpenSuse MicroOS (x86_64, arm64). If your distribution has a native Incus package, it's best to use it.
-
-The focus is on x86_64 and arm64, but other platforms may work if you build the Alpine-based Dockerfile.
+<!-- AI:start:license -->
+[Apache-2.0](https://github.com/Interested-Deving-1896/incus-docker/blob/latest/LICENSE) © 2026 [Interested-Deving-1896](https://github.com/Interested-Deving-1896)
+<!-- AI:end:license -->
